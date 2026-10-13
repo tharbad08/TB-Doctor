@@ -1,0 +1,47 @@
+name: Build TB Doctor
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Compile TB Doctor
+        run: dotnet build TBDoctor.csproj --configuration Release --nologo
+      - name: Verify and assemble install-ready mod
+        shell: bash
+        run: |
+          set -euo pipefail
+          DLL="bin/Release/netstandard2.1/TBDoctor.dll"
+          ROOT="$RUNNER_TEMP/install/TBDoctor/version-1.1"
+          test -s "$DLL"
+          mkdir -p "$ROOT/Scripts"
+          cp manifest.json "$ROOT/manifest.json"
+          cp "$DLL" "$ROOT/Scripts/TBDoctor.dll"
+          python3 -m json.tool "$ROOT/manifest.json" > /dev/null
+          test -s "$ROOT/Scripts/TBDoctor.dll"
+          echo "Compiled DLL SHA256:"
+          sha256sum "$ROOT/Scripts/TBDoctor.dll"
+          echo "Compressed compiled binary transfer:"
+          echo "BEGIN_TBDOCTOR_GZ_BASE64"
+          gzip -9 -n -c "$ROOT/Scripts/TBDoctor.dll" | base64 -w0
+          echo
+          echo "END_TBDOCTOR_GZ_BASE64"
+      - name: Upload install-ready mod
+        uses: actions/upload-artifact@v4
+        with:
+          name: TBDoctor_0.1.0
+          path: ${{ runner.temp }}/install/
+          if-no-files-found: error
