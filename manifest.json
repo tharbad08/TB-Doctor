@@ -1,9 +1,9 @@
 {
   "Name": "Demolition Job Doctor",
-  "Version": "0.1.0.0",
+  "Version": "0.1.1.0",
   "Id": "tharbad08.TBDoctor",
   "MinimumGameVersion": "1.1.0.0",
-  "Description": "Generic safety layer for stale or malformed demolition jobs. Skips bad demolition targets and prevents one broken target from crashing or stalling builder job selection.",
+  "Description": "Generic safety layer for stale or malformed demolition jobs. Skips bad demolition targets and prevents one broken target from crashing or stalling builder job selection. Recoveries are logged to Player.log and produce an auto-dismissing 30-second warning.",
   "RequiredMods": [
     {
       "Id": "Harmony",
