@@ -1,4 +1,4 @@
-Demolition Job Doctor 0.1.0
+Demolition Job Doctor 0.1.1
 ===========================
 
 Purpose
@@ -18,8 +18,8 @@ Behavior
      is suppressed for that decision tick so the simulation does not crash.
 
 3. Logging:
-   - Player.log contains [DemolitionJobDoctor] recovery messages.
-   - Repeated identical failures are rate-limited to avoid log spam.
+   - Unity Player.log contains [TB Doctor] recovery warnings with exception stack traces.
+   - Repeated identical failures are rate-limited to avoid log spam.\n\n4. Native in-game notifications:\n   - For each distinct recovered failure signature, show a warning through\n     Timberborn QuickNotificationService on the UI thread.\n   - Warnings automatically hide after 30 real-time seconds.\n   - Other notifications retain their default durations.\n   - Alerts are queued with a cap to avoid notification storms.
 
 The mod does NOT blindly delete demolition orders. It quarantines only targets that
 actually throw. This avoids accidentally removing legitimate demolition work.
@@ -39,12 +39,12 @@ Build
 This source package includes build-arch-linux.sh. It auto-detects the standard Steam
 Timberborn install and Workshop Harmony mod. Run it from this folder.
 
-After Code.dll is built, install the folder in:
-  ~/Documents/Timberborn/Mods/DemolitionJobDoctor/
+After TBDoctor.dll is built, install the folder in:
+  ~/Documents/Timberborn/Mods/TBDoctor/version-1.1/
 
 The folder should contain at least:
   manifest.json
-  Code.dll
+  Scripts/TBDoctor.dll
 
 Compatibility note
 ------------------
