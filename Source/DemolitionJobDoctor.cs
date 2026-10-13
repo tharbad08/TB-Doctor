@@ -20,28 +20,33 @@ namespace DemolitionJobDoctor
     internal static class Log
     {
         private static readonly Dictionary<string, int> Counts = new Dictionary<string, int>();
+        private static readonly object CountLock = new object();
 
         internal static void Info(string message)
         {
-            Console.WriteLine("[DemolitionJobDoctor] " + message);
+            GameLog.Info(message);
         }
 
         internal static void Recovered(string patch, Exception ex)
         {
             var key = patch + "|" + ex.GetType().FullName + "|" + ex.Message;
             int count;
-            if (!Counts.TryGetValue(key, out count))
-                count = 0;
-            count++;
-            Counts[key] = count;
-
-            // Log the first few occurrences, then occasionally. A stale target may be
-            // inspected many times per second and should not flood Player.log.
-            if (count <= 3 || count == 10 || count == 50 || count % 250 == 0)
+            lock (CountLock)
             {
-                Info("recovered " + patch + " exception #" + count + ": " +
-                     ex.GetType().Name + ": " + ex.Message);
+                if (!Counts.TryGetValue(key, out count))
+                    count = 0;
+                Counts[key] = ++count;
             }
+
+            // Player.log gets complete exception details, including stack trace.
+            // Rate-limit identical failures to avoid flooding the log each tick.
+            if (count <= 3 || count == 10 || count == 50 || count % 250 == 0)
+                GameLog.Warning("Recovered " + patch + " failure #" + count +
+                                "; skipped bad demolition job. Details:\n" + ex);
+
+            // One notification per distinct exception signature, on the UI thread.
+            if (count == 1)
+                NotificationBridge.EnqueueRecovery(patch, ex);
         }
     }
 
