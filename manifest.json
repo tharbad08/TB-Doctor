@@ -1,13 +1,13 @@
 {
   "Name": "Demolition Job Doctor",
-  "Version": "0.1.1.0",
+  "Version": "1.1.1",
   "Id": "tharbad08.TBDoctor",
   "MinimumGameVersion": "1.1.0.0",
-  "Description": "Generic safety layer for stale or malformed demolition jobs. Skips bad demolition targets and prevents one broken target from crashing or stalling builder job selection. Recoveries are logged to Player.log and produce an auto-dismissing 30-second warning.",
+  "Description": "Narrow demolition recovery and self-healing terrain renderer upper-halo tiles at resized terrain-height boundaries; leaves terrain and structures intact.",
   "RequiredMods": [
     {
       "Id": "Harmony",
-      "MinimumVersion": "2.3.3"
+      "MinimumVersion": "2.4.1"
     }
   ]
 }
