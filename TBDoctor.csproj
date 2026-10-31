@@ -6,13 +6,16 @@
     <ImplicitUsings>disable</ImplicitUsings>
     <AssemblyName>TBDoctor</AssemblyName>
     <RootNamespace>DemolitionJobDoctor</RootNamespace>
-    <AssemblyVersion>0.1.1.0</AssemblyVersion>
-    <FileVersion>0.1.1.0</FileVersion>
+    <AssemblyVersion>1.1.1.0</AssemblyVersion>
+    <FileVersion>1.1.1.0</FileVersion>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Source/**/*.cs" />
-    <PackageReference Include="Lib.Harmony" Version="2.4.1" />
-    <ProjectReference Include="Stubs/Timberborn.ModManagerScene/Timberborn.ModManagerScene.Stub.csproj" Private="false" />
+
   </ItemGroup>
+  <Import Project="refs/ReferenceAssemblies.props" Condition="Exists('refs/ReferenceAssemblies.props')" />
+  <Target Name="RequireGenuineReferences" BeforeTargets="ResolveReferences">
+    <Error Condition="!Exists('refs/ReferenceAssemblies.props')" Text="Real game references required: run scripts/prepare_refs.py first." />
+  </Target>
 </Project>
