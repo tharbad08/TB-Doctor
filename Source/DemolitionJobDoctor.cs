@@ -42,7 +42,7 @@ namespace DemolitionJobDoctor
             // Rate-limit identical failures to avoid flooding the log each tick.
             if (count <= 3 || count == 10 || count == 50 || count % 250 == 0)
                 GameLog.Warning("Recovered " + patch + " failure #" + count +
-                                "; skipped bad demolition job. Details:\n" + ex);
+                                "; details:\n" + ex);
 
             // One notification per distinct exception signature, on the UI thread.
             if (count == 1)
